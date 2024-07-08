@@ -5,7 +5,7 @@
   "description": "Shared code and other assets for VirtuSense projects",
   "unity": "2019.1",
   "dependencies": {
-    "com.unity.textmeshpro": "3.0.6"
+    "com.unity.textmeshpro": "2.1.6"
   },
   "keywords": [
     "sharedcode",
