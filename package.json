@@ -1,0 +1,18 @@
+{
+  "name": "com.virtusense.sharedcodeassets",
+  "version": "1.0.0",
+  "displayName": "VirtuSense Shared Code Assets",
+  "description": "Shared code and other assets for VirtuSense projects",
+  "unity": "2019.1",
+  "dependencies": {
+    "com.unity.textmeshpro": "3.0.6"
+  },
+  "keywords": [
+    "sharedcode",
+    "VirtuSense"
+  ],
+  "author": {
+    "name": "VirtuSense Technologies",
+    "email": "jacobw@virtusense.com"
+  }
+}
