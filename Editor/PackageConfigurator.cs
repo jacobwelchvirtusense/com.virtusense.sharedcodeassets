@@ -5,14 +5,19 @@
  * Project: #PROJECTNAME#
  * Creation Date: #DATE#
  * 
- * Description: TODO
+ * Description: Was having issues getting this script to work but the purpose was to properly
+ *                     handle package dependencies that are version specific. This script was
+ *                     supposed to change the version of the package used but it wasn't working
+ *                     and I had other things to do. I'm leaving this here for now.
 ****************************************************************************/
+/*
 using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Runtime.Hosting;
 using UnityEditor;
 using UnityEngine;
+
 
 [InitializeOnLoad]
 public static class PackageConfigurator
@@ -39,7 +44,6 @@ public static class PackageConfigurator
         PackageJson packageData = JsonUtility.FromJson<PackageJson>(packageJson);
 
         string unityVersion = Application.unityVersion;
-        Debug.Log($"Unity version: {unityVersion}");
 
         if (unityVersion.StartsWith("2020") || unityVersion.StartsWith("2021"))
         {
@@ -93,9 +97,9 @@ public static class PackageConfigurator
     File.WriteAllText(packagePath, updatedPackageJson);
 
     AssetDatabase.Refresh();
-}*/
+}
 
-    private static string GetProjectName()
+private static string GetProjectName()
     {
         string projectPath = Application.dataPath;
         string projectName = new DirectoryInfo(projectPath).Parent.Name;
@@ -158,4 +162,4 @@ public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiv
     {
         dictionary[key] = value;
     }
-}
+}*/
