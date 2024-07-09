@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 3148146157463849339}
   - component: {fileID: 4897578958682091871}
   - component: {fileID: 1924629920023975962}
+  - component: {fileID: 7998142022477121188}
   m_Layer: 5
   m_Name: Timeout Background
   m_TagString: Untagged
@@ -411,6 +412,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70df5d0f1542c54419a36f79bc20e2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7998142022477121188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4052932292927937889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1acb6469c1efaf0428a6d4b33784400b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6325695892019484792
