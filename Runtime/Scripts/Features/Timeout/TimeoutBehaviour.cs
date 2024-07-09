@@ -41,7 +41,7 @@ namespace SharedPackage.Features.Timeout
         /// <summary>
         /// The total time the prompt will be displayed in minutes. This is subtracted from the TimeBeforeTimeout to determine when the prompt will be displayed. It should be smaller than the TimeBeforeTimeout.
         /// </summary>
-        private const float TIMEOUT_PROMPT_DURATION = 0.25f;
+        private const float TIMEOUT_PROMPT_DURATION = 0.5f;
 
         /// <summary>
         /// The total time before the prompt is displayed in seconds. This is subtracted from the TimeBeforeTimeout to determine when the prompt will be displayed.
