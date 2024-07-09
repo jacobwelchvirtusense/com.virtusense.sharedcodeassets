@@ -40,11 +40,11 @@ public static class PackageConfigurator
 
         if (Application.unityVersion.StartsWith("2020") || Application.unityVersion.StartsWith("2021"))
         {
-            packageData.dependencies["com.unity.textmeshpro"] = "3.0.6";
+            packageData.dependencies.Add("com.unity.textmeshpro", "3.0.6");
         }
         else if (Application.unityVersion.StartsWith("2019"))
         {
-            packageData.dependencies["com.unity.textmeshpro"] = "2.1.6";
+            packageData.dependencies.Add("com.unity.textmeshpro", "2.1.6");
         }
 
         string updatedPackageJson = JsonUtility.ToJson(packageData, true);
