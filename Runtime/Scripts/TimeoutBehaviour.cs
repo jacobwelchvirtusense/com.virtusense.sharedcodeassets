@@ -128,6 +128,11 @@ namespace SharedPackage
             }
         }
 
+        private void OnApplicationQuit()
+        {
+            SetPromptActive(false);
+        }
+
         #region Reset Conditions
         /// <summary>
         /// Returns true if the user has pressed any key.
@@ -220,5 +225,4 @@ namespace SharedPackage
         #endregion
         #endregion
     }
-
 }
