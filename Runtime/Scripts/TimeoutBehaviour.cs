@@ -88,19 +88,31 @@ namespace SharedPackage
         [HideInInspector]
         public UnityEvent OnTimeout = new UnityEvent();
 
-        [Tooltip("The prompt that will be displayed and updated")]
-        [SerializeField] private GameObject timeoutPrompt;
+        /// <summary>
+        /// The prompt that will be displayed and updated.
+        /// </summary>
+        private GameObject timeoutPrompt;
 
-        [FormerlySerializedAs("timeoutTimerBar")]
-        [Tooltip("The image that will control the fill amount of the timeout prompt")]
-        [SerializeField] private Image promptTimerBar;
+        /// <summary>
+        /// The image that will control the fill amount of the timeout prompt.
+        /// </summary>
+        private Image promptTimerBar;
 
-        [FormerlySerializedAs("timeoutText")]
-        [Tooltip("The text that tells the user how much time is left before the timeout")]
-        [SerializeField] private TextMeshProUGUI promptTimerText;
+        /// <summary>
+        /// The text that tells the user how much time is left before the timeout.
+        /// </summary>
+        private TextMeshProUGUI promptTimerText;
         #endregion
 
         #region Functions
+        private void Awake()
+        {
+            timeoutPrompt = transform.GetChild(0).gameObject;
+            var timeBarTextParent = timeoutPrompt.transform.GetChild(0).GetChild(0);
+            promptTimerText = timeBarTextParent.GetChild(0).GetComponent<TextMeshProUGUI>();
+            promptTimerBar = timeBarTextParent.GetChild(1).GetComponent<Image>();
+        }
+
         /// <summary>
         /// Checks if the user has made any inputs.
         /// </summary>
