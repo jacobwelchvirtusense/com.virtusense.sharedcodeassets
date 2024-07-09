@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace SharedPackage
@@ -40,7 +39,7 @@ namespace SharedPackage
         }
 
         /// <summary>
-        /// The total time the prompt will be displayed in minutes. This is subtracted from the TimeBeforeTimeout to determine when the prompt will be displayed.
+        /// The total time the prompt will be displayed in minutes. This is subtracted from the TimeBeforeTimeout to determine when the prompt will be displayed. It should be smaller than the TimeBeforeTimeout.
         /// </summary>
         private const float TIMEOUT_PROMPT_DURATION = 0.2f;
 
@@ -96,7 +95,7 @@ namespace SharedPackage
         /// <summary>
         /// The image that will control the fill amount of the timeout prompt.
         /// </summary>
-        private Image promptTimerBar;
+        // private Image promptTimerBar;
 
         /// <summary>
         /// The text that tells the user how much time is left before the timeout.
@@ -105,12 +104,16 @@ namespace SharedPackage
         #endregion
 
         #region Functions
+        /// <summary>
+        /// We get these so that we don't have non-assigned warnings from the package.
+        /// </summary>
         private void Awake()
         {
             timeoutPrompt = transform.GetChild(0).gameObject;
+
             var timeBarTextParent = timeoutPrompt.transform.GetChild(0).GetChild(0);
-            promptTimerText = timeBarTextParent.GetChild(0).GetComponent<TextMeshProUGUI>();
-            promptTimerBar = timeBarTextParent.GetChild(1).GetComponent<Image>();
+            promptTimerText = timeBarTextParent.GetChild(1).GetComponent<TextMeshProUGUI>();
+            // promptTimerBar = timeBarTextParent.GetChild(1).GetComponent<Image>(); // We decided not to use the timer bar but leaving functionality commented out
         }
 
         /// <summary>
@@ -128,6 +131,9 @@ namespace SharedPackage
             }
         }
 
+        /// <summary>
+        /// Sets prompt to be inactive as there was a bug where the scene instance was not getting reset when stopping play mode.
+        /// </summary>
         private void OnApplicationQuit()
         {
             SetPromptActive(false);
@@ -219,8 +225,9 @@ namespace SharedPackage
         /// </summary>
         private void UpdatePromptTimer()
         {
-            promptTimerBar.fillAmount = Mathf.InverseLerp(TimeBeforeTimeoutSeconds, PromptStartingTimeSeconds, timeSinceLastUserActivity);
-            promptTimerText.text = Mathf.CeilToInt(TimeBeforeTimeoutSeconds - timeSinceLastUserActivity).ToString();
+            //promptTimerBar.fillAmount = Mathf.InverseLerp(TimeBeforeTimeoutSeconds, PromptStartingTimeSeconds, timeSinceLastUserActivity);
+            var timeLeft = Mathf.CeilToInt(TimeBeforeTimeoutSeconds - timeSinceLastUserActivity).ToString();
+            promptTimerText.text = $"Your session will end in <b>{ timeLeft }</b> seconds.";
         }
         #endregion
         #endregion
