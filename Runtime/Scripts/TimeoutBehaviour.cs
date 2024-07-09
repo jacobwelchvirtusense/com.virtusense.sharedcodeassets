@@ -11,7 +11,9 @@
  *                     function is public so that it can be called from other scripts for this purpose.
 ****************************************************************************/
 using System.Threading.Tasks;
+#if UNITY_2021_1_OR_NEWER
 using TMPro;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -95,10 +97,12 @@ namespace SharedPackage
         [Tooltip("The image that will control the fill amount of the timeout prompt")]
         [SerializeField] private Image promptTimerBar;
 
+#if UNITY_2021_1_OR_NEWER
         [FormerlySerializedAs("timeoutText")]
         [Tooltip("The text that tells the user how much time is left before the timeout")]
         [SerializeField] private TextMeshProUGUI promptTimerText;
-        #endregion
+#endif
+#endregion
 
         #region Functions
         /// <summary>
