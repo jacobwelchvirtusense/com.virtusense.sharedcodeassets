@@ -16,7 +16,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace SharedPackage
+namespace SharedPackage.Features.Timeout
 {
     public class TimeoutBehaviour : MonoBehaviour
     {
