@@ -28,7 +28,7 @@ public static class PackageConfigurator
 
         if (!File.Exists(packagePath))
         {
-            if(GetProjectName() != "SharedCodeAssetsProject")
+            if (GetProjectName() != "SharedCodeAssetsProject")
             {
                 Debug.LogError($"Package file not found at {packagePath}");
             }
@@ -38,20 +38,62 @@ public static class PackageConfigurator
         string packageJson = File.ReadAllText(packagePath);
         PackageJson packageData = JsonUtility.FromJson<PackageJson>(packageJson);
 
-        if (Application.unityVersion.StartsWith("2020") || Application.unityVersion.StartsWith("2021"))
+        string unityVersion = Application.unityVersion;
+        Debug.Log($"Unity version: {unityVersion}");
+
+        if (unityVersion.StartsWith("2020") || unityVersion.StartsWith("2021"))
         {
-            packageData.dependencies.Add("com.unity.textmeshpro", "3.0.6");
+            packageData.dependencies["com.unity.textmeshpro"] = "3.0.6";
         }
-        else if (Application.unityVersion.StartsWith("2019"))
+        else if (unityVersion.StartsWith("2019"))
         {
-            packageData.dependencies.Add("com.unity.textmeshpro", "2.1.6");
+            packageData.dependencies["com.unity.textmeshpro"] = "2.1.6";
         }
 
         string updatedPackageJson = JsonUtility.ToJson(packageData, true);
+        updatedPackageJson = FixJson(updatedPackageJson);
         File.WriteAllText(packagePath, updatedPackageJson);
 
         AssetDatabase.Refresh();
     }
+
+    private static string FixJson(string json)
+    {
+        // Remove extra quotes and escape sequences
+        json = json.Replace("\\\"", "\"");
+        json = json.Replace("\"{", "{").Replace("}\"", "}");
+        return json;
+    }
+
+    /*
+    string packagePath = "Packages/com.virtusense.sharedcodeassets/package.json";
+
+    if (!File.Exists(packagePath))
+    {
+        if(GetProjectName() != "SharedCodeAssetsProject")
+        {
+            Debug.LogError($"Package file not found at {packagePath}");
+        }
+        return;
+    }
+
+    string packageJson = File.ReadAllText(packagePath);
+    PackageJson packageData = JsonUtility.FromJson<PackageJson>(packageJson);
+
+    if (Application.unityVersion.StartsWith("2020") || Application.unityVersion.StartsWith("2021"))
+    {
+        packageData.dependencies.Add("com.unity.textmeshpro", "3.0.6");
+    }
+    else if (Application.unityVersion.StartsWith("2019"))
+    {
+        packageData.dependencies.Add("com.unity.textmeshpro", "2.1.6");
+    }
+
+    string updatedPackageJson = JsonUtility.ToJson(packageData, true);
+    File.WriteAllText(packagePath, updatedPackageJson);
+
+    AssetDatabase.Refresh();
+}*/
 
     private static string GetProjectName()
     {
@@ -69,10 +111,7 @@ public class PackageJson
     public string version;
     public string displayName;
     public string description;
-    public DependencyDictionary dependencies = new DependencyDictionary();
-
-    [Serializable]
-    public class DependencyDictionary : SerializableDictionary<string, string> { }
+    public Dictionary<string, string> dependencies = new Dictionary<string, string>();
 }
 
 [Serializable]
