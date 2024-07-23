@@ -94,7 +94,7 @@ namespace SharedPackage.Features.SplashScreen
             Debug.Log("Setting Splash inactive");
             gameObject.SetActive(false);
 
-            yield return new WaitForEndOfFrame(); // Ensures that the splash screen has a frame to become disabled
+            //yield return new WaitForEndOfFrame(); // Ensures that the splash screen has a frame to become disabled
 
             #region Debug Loop
             // If you want to test it in a loop you can uncomment this code
