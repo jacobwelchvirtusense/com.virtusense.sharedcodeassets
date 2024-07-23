@@ -9,8 +9,10 @@
  *                     run code during its exectuion. The purpose of this compared to the traditional
  *                     unity splash is that we can preload AKDK dlls during this process.
 ****************************************************************************/
+using PlasticPipe.PlasticProtocol.Client;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -56,14 +58,28 @@ namespace SharedPackage.Features.SplashScreen
         [Range(0.0f, 5.0f)]
         [Tooltip("The time it takes for the image to fade out")]
         [SerializeField] private float fadeOutTime = 0.25f;
+
+        /// <summary>
+        /// This event is fired when the splash screen has completed its routine.
+        /// </summary>
+        [HideInInspector]
+        public UnityEvent OnSplashScreenComplete = new UnityEvent();
         #endregion
 
         #region Functions
         /// <summary>
+        /// Starts the splash screen routine when the object is enabled.
+        /// </summary>
+        private void Start()
+        {
+            StartCoroutine(SplashScreenRoutine());
+        }
+
+        /// <summary>
         /// Handles the routine for a splash screen.
         /// </summary>
         /// <returns></returns>
-        public IEnumerator SplashScreenRoutine()
+        private IEnumerator SplashScreenRoutine()
         {
             if (splashImage == null)
             {
@@ -91,6 +107,7 @@ namespace SharedPackage.Features.SplashScreen
                 yield return ImageScaleRoutine();
             }
 
+            OnSplashScreenComplete.Invoke();
             StartCoroutine(DelayDisablingSplash());
             //yield return new WaitForEndOfFrame(); // Ensures that the splash screen has a frame to become disabled
 
