@@ -91,9 +91,7 @@ namespace SharedPackage.Features.SplashScreen
                 yield return ImageScaleRoutine();
             }
 
-            Debug.Log("Setting Splash inactive");
-            gameObject.SetActive(false);
-
+            StartCoroutine(DelayDisablingSplash());
             //yield return new WaitForEndOfFrame(); // Ensures that the splash screen has a frame to become disabled
 
             #region Debug Loop
@@ -103,6 +101,13 @@ namespace SharedPackage.Features.SplashScreen
 
             StartCoroutine(SplashScreenRoutine());*/
             #endregion
+        }
+
+        private IEnumerator DelayDisablingSplash()
+        {
+            yield return new WaitForEndOfFrame();
+
+            gameObject.SetActive(false);
         }
 
         /// <summary>
