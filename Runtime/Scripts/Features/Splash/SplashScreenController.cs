@@ -9,7 +9,6 @@
  *                     run code during its exectuion. The purpose of this compared to the traditional
  *                     unity splash is that we can preload AKDK dlls during this process.
 ****************************************************************************/
-using PlasticPipe.PlasticProtocol.Client;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
