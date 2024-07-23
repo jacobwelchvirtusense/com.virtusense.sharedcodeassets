@@ -58,6 +58,10 @@ namespace SharedPackage.Features.SplashScreen
         [Tooltip("The time it takes for the image to fade out")]
         [SerializeField] private float fadeOutTime = 0.25f;
 
+        [Range(0.0f, 5.0f)]
+        [Tooltip("The time to delay the unloading of the splash screen by")]
+        [SerializeField] private float splashScreenDisableDelay = 0.1f;
+
         /// <summary>
         /// This event is fired when the splash screen has completed its routine.
         /// </summary>
@@ -121,7 +125,7 @@ namespace SharedPackage.Features.SplashScreen
 
         private IEnumerator DelayDisablingSplash()
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(splashScreenDisableDelay);
 
             gameObject.SetActive(false);
         }
