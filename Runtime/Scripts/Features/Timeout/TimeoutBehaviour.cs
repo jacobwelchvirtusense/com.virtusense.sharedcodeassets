@@ -66,20 +66,23 @@ namespace SharedPackage.Features.Timeout
         }
         #endregion
 
+        private float timeOfLastUserActivity = 0.0f;
+
         /// <summary>
         /// Holds the number of seconds since the user has made any inputs or any conditions that would reset the prompt timer.
         /// </summary>
-        private float timeSinceLastUserActivity = 0.0f;
+        private float TimeSinceLastUserActivity
+        {
+            get
+            {
+                return Time.unscaledTime - timeOfLastUserActivity;
+            }
+        }
 
         /// <summary>
         /// Holds true if the timeout prompt is currently set to being open.
         /// </summary>
         public static bool TimeoutPromptOpen = false;
-
-        /// <summary>
-        /// Holds true if we have processed the first frame yet.
-        /// </summary>
-        private bool hasPassedFirstFrame = false;
 
         /// <summary>
         /// An event that is invoked when the user has been inactive for too long.
@@ -114,6 +117,14 @@ namespace SharedPackage.Features.Timeout
             var timeBarTextParent = timeoutPrompt.transform.GetChild(0).GetChild(0);
             promptTimerText = timeBarTextParent.GetChild(1).GetComponent<TextMeshProUGUI>();
             // promptTimerBar = timeBarTextParent.GetChild(1).GetComponent<Image>(); // We decided not to use the timer bar but leaving functionality commented out
+        }
+
+        /// <summary>
+        /// Records what the starting time is when this object is initialized.
+        /// </summary>
+        private void Start()
+        {
+            timeOfLastUserActivity = Time.unscaledTime;
         }
 
         /// <summary>
@@ -168,7 +179,7 @@ namespace SharedPackage.Features.Timeout
         /// </summary>
         public void ResetTime()
         {
-            timeSinceLastUserActivity = 0;
+            timeOfLastUserActivity = Time.unscaledTime;
             SetPromptActive(false);
         }
 
@@ -177,20 +188,21 @@ namespace SharedPackage.Features.Timeout
         /// </summary>
         private void UpdateTimeoutProgress()
         {
+            /*
             if (hasPassedFirstFrame) // We do this check because unscaledDelta time throws a bad value on the first frame
             {
-                timeSinceLastUserActivity += Time.unscaledDeltaTime; // Using unscaleedDeltaTime because normal deltaTime is affected by time scale and will show as 0 when we have the application paused
+                TimeSinceLastUserActivity += Time.unscaledDeltaTime; // Using unscaleedDeltaTime because normal deltaTime is affected by time scale and will show as 0 when we have the application paused
             }
             else
             {
                 hasPassedFirstFrame = true;
-            }
+            }*/
 
-            if (timeSinceLastUserActivity >= TimeBeforeTimeoutSeconds)
+            if (TimeSinceLastUserActivity >= TimeBeforeTimeoutSeconds)
             {
                 OnTimeout.Invoke();
             }
-            else if (timeSinceLastUserActivity >= PromptStartingTimeSeconds)
+            else if (TimeSinceLastUserActivity >= PromptStartingTimeSeconds)
             {
                 SetPromptActive(true);
                 UpdatePromptTimer();
@@ -226,7 +238,7 @@ namespace SharedPackage.Features.Timeout
         private void UpdatePromptTimer()
         {
             //promptTimerBar.fillAmount = Mathf.InverseLerp(TimeBeforeTimeoutSeconds, PromptStartingTimeSeconds, timeSinceLastUserActivity);
-            var timeLeft = Mathf.CeilToInt(TimeBeforeTimeoutSeconds - timeSinceLastUserActivity).ToString();
+            var timeLeft = Mathf.CeilToInt(TimeBeforeTimeoutSeconds - TimeSinceLastUserActivity).ToString();
             promptTimerText.text = $"Your session will end in <b>{ timeLeft }</b> seconds.";
         }
         #endregion
