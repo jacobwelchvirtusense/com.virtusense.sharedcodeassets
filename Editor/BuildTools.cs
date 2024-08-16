@@ -15,7 +15,7 @@ using UnityEditor.Build.Reporting;
 
 public class BuildTools
 {
-    private const string DefaultBuildPath = "D:\\Temp Builds\\";
+    private const string DefaultBuildPath = "D:\\Temp Builds";
 
     [MenuItem("Tools/Build Tools/Build All Platforms")]
     public static void BuildForAllPlatforms()
