@@ -25,13 +25,13 @@ public class BuildTools
     }
 
     [MenuItem("Tools/Build Tools/Build For Windows")]
-    public static void BuildForWindows()
+    public static void BuildForWindowsFromEditor()
     {
         BuildForWindows(DefaultBuildPath);
     }
 
     [MenuItem("Tools/Build Tools/Build For Mobile")]
-    public static void BuildForMobile()
+    public static void BuildForMobileFromEditor()
     {
         BuildForMobile(DefaultBuildPath);
     }
