@@ -15,6 +15,8 @@ using UnityEditor.Build.Reporting;
 
 public class BuildTools
 {
+    private const string DefaultBuildPath = "D:\\Temp Builds\\";
+
     [MenuItem("Tools/Build Tools/Build All Platforms")]
     public static void BuildForAllPlatforms()
     {
@@ -22,22 +24,20 @@ public class BuildTools
         BuildForMobile();
     }
 
-    [MenuItem("Tools/Build Tools/Build Windows")]
+    [MenuItem("Tools/Build Tools/Build For Windows")]
     public static void BuildForWindows()
     {
-        List<string> scenes = new List<string>();
-        foreach (var scene in EditorBuildSettings.scenes)
-        {
-            Debug.Log(scene.path);
-            scenes.Add(scene.path);
-        }
-
-        BuildForPlatform(scenes.ToArray(), BuildTarget.StandaloneWindows64, $"{GetBuildFolder()}Games\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
+        BuildForWindows(DefaultBuildPath);
     }
 
-    [MenuItem("Tools/Build Tools/Build Mobile")]
+    [MenuItem("Tools/Build Tools/Build For Mobile")]
     public static void BuildForMobile()
     {
+        BuildForMobile(DefaultBuildPath);
+    }
+
+    public static void BuildForWindows(string buildPath = DefaultBuildPath)
+    {
         List<string> scenes = new List<string>();
         foreach (var scene in EditorBuildSettings.scenes)
         {
@@ -45,13 +45,21 @@ public class BuildTools
             scenes.Add(scene.path);
         }
 
-        BuildForPlatform(scenes.ToArray(), BuildTarget.iOS, $"{GetBuildFolder()}Mobile\\iOS\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
-        BuildForPlatform(scenes.ToArray(), BuildTarget.Android, $"{GetBuildFolder()}Mobile\\Android\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
+        BuildForPlatform(scenes.ToArray(), BuildTarget.StandaloneWindows64, $"{buildPath}\\Games\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
+        //BuildForPlatform(scenes.ToArray(), BuildTarget.StandaloneWindows64, $"{GetDefaultBuildFolder()}Games\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
     }
 
-    private static string GetBuildFolder()
+    public static void BuildForMobile(string buildPath = DefaultBuildPath)
     {
-        return "D:\\Temp Builds\\";
+        List<string> scenes = new List<string>();
+        foreach (var scene in EditorBuildSettings.scenes)
+        {
+            Debug.Log(scene.path);
+            scenes.Add(scene.path);
+        }
+
+        BuildForPlatform(scenes.ToArray(), BuildTarget.iOS, $"{buildPath}\\Mobile\\iOS\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
+        BuildForPlatform(scenes.ToArray(), BuildTarget.Android, $"{buildPath}\\Mobile\\Android\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
     }
 
     private static void BuildForPlatform(string[] scenes, BuildTarget target, string platformPath, BuildOptions options = BuildOptions.None)
