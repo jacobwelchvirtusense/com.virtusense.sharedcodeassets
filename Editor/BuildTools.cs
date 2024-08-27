@@ -12,10 +12,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
+using System.IO;
 
 public class BuildTools
 {
-    private const string DefaultBuildPath = "D:\\Temp Builds";
+    private const string DEFAULT_BUILD_PATH = "D:\\Temp Builds";
+
+    private const string PATH_TO_BUILD_INFO = "releaseInfo.text";
+
+    private static Dictionary<string, string> releaseInfoDictionary = new Dictionary<string, string>();
 
     [MenuItem("Tools/Build Tools/Build All Platforms")]
     public static void BuildForAllPlatforms()
@@ -27,17 +32,19 @@ public class BuildTools
     [MenuItem("Tools/Build Tools/Build For Windows")]
     public static void BuildForWindowsFromEditor()
     {
-        BuildForWindows(DefaultBuildPath);
+        BuildForWindows(true);
     }
 
     [MenuItem("Tools/Build Tools/Build For Mobile")]
     public static void BuildForMobileFromEditor()
     {
-        BuildForMobile(DefaultBuildPath);
+        BuildForMobile(true);
     }
 
-    public static void BuildForWindows(string buildPath = DefaultBuildPath)
+    public static void BuildForWindows(bool isFromEditor = false)
     {
+        var buildPath = GetBuildPath(isFromEditor);
+
         List<string> scenes = new List<string>();
         foreach (var scene in EditorBuildSettings.scenes)
         {
@@ -49,8 +56,10 @@ public class BuildTools
         //BuildForPlatform(scenes.ToArray(), BuildTarget.StandaloneWindows64, $"{GetDefaultBuildFolder()}Games\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
     }
 
-    public static void BuildForMobile(string buildPath = DefaultBuildPath)
+    public static void BuildForMobile(bool isFromEditor = false)
     {
+        var buildPath = GetBuildPath(isFromEditor);
+
         List<string> scenes = new List<string>();
         foreach (var scene in EditorBuildSettings.scenes)
         {
@@ -60,6 +69,58 @@ public class BuildTools
 
         BuildForPlatform(scenes.ToArray(), BuildTarget.iOS, $"{buildPath}\\Mobile\\iOS\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
         BuildForPlatform(scenes.ToArray(), BuildTarget.Android, $"{buildPath}\\Mobile\\Android\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
+    }
+
+    private static string GetBuildPath(bool isFromEditor)
+    {
+        if (isFromEditor) return DEFAULT_BUILD_PATH;
+
+        InitializeReleaseInfo();
+
+        if(releaseInfoDictionary.TryGetValue("ReleasePath", out string releasePath))
+        {
+            return releasePath;
+        }
+        else
+        {
+            Debug.LogError("No release path was found");
+        }
+
+        return DEFAULT_BUILD_PATH;
+    }
+
+    private static void InitializeReleaseInfo()
+    {
+        // Check if the file exists
+        if (File.Exists(PATH_TO_BUILD_INFO))
+        {
+            // Read the entire file content as a single string
+            string[] lines = File.ReadAllLines(PATH_TO_BUILD_INFO);
+
+            foreach (string line in lines)
+            {
+                // Split the line at the ';' delimiter
+                string[] parts = line.Split(';');
+
+                // Ensure the line contains exactly two parts (key and value)
+                if (parts.Length == 2)
+                {
+                    string key = parts[0].Trim();
+                    string value = parts[1].Trim();
+
+                    // Add the key-value pair to the dictionary
+                    releaseInfoDictionary[key] = value;
+                }
+                else
+                {
+                    Debug.LogError("Line format incorrect: " + line);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("File not found: " + PATH_TO_BUILD_INFO);
+        }
     }
 
     private static void BuildForPlatform(string[] scenes, BuildTarget target, string platformPath, BuildOptions options = BuildOptions.None)
