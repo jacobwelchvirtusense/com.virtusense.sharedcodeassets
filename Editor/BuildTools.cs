@@ -22,6 +22,8 @@ public class BuildTools
 
     private static Dictionary<string, string> releaseInfoDictionary = new Dictionary<string, string>();
 
+    private static bool isFromEditor = false;
+
     [MenuItem("Tools/Build Tools/Build All Platforms")]
     public static void BuildForAllPlatforms()
     {
@@ -32,19 +34,22 @@ public class BuildTools
     [MenuItem("Tools/Build Tools/Build For Windows")]
     public static void BuildForWindowsFromEditor()
     {
-        BuildForWindows(true);
+        isFromEditor = true;
+        BuildForWindows();
+        isFromEditor = false;
     }
 
     [MenuItem("Tools/Build Tools/Build For Mobile")]
     public static void BuildForMobileFromEditor()
     {
-        BuildForMobile(true);
+        isFromEditor = true;
+        BuildForMobile();
+        isFromEditor = false;
     }
 
-    public static void BuildForWindows(bool isFromEditor = false)
+    public static void BuildForWindows()
     {
         var buildPath = GetBuildPath(isFromEditor);
-
         Debug.Log("Build path: " + buildPath);
         
         List<string> scenes = new List<string>();
