@@ -18,7 +18,7 @@ public class BuildTools
 {
     private const string DEFAULT_BUILD_PATH = "D:\\Temp Builds";
 
-    private const string PATH_TO_BUILD_INFO = "releaseInfo.text";
+    private const string PATH_TO_BUILD_INFO = "releaseInfo.txt";
 
     private static Dictionary<string, string> releaseInfoDictionary = new Dictionary<string, string>();
 
@@ -43,8 +43,10 @@ public class BuildTools
 
     public static void BuildForWindows(bool isFromEditor = false)
     {
-        var buildPath = GetBuildPath(false);
+        var buildPath = GetBuildPath(isFromEditor);
 
+        Debug.Log("Build path: " + buildPath);
+        
         List<string> scenes = new List<string>();
         foreach (var scene in EditorBuildSettings.scenes)
         {
@@ -71,7 +73,7 @@ public class BuildTools
         BuildForPlatform(scenes.ToArray(), BuildTarget.Android, $"{buildPath}\\Mobile\\Android\\{PlayerSettings.productName}\\{PlayerSettings.productName}.exe");
     }
 
-    private static string GetBuildPath(bool isFromEditor)
+    public static string GetBuildPath(bool isFromEditor)
     {
         if (isFromEditor) return DEFAULT_BUILD_PATH;
 
@@ -79,7 +81,6 @@ public class BuildTools
 
         if(releaseInfoDictionary.TryGetValue("ReleasePath", out string releasePath))
         {
-            Debug.LogError("This is my build path: " + releasePath);
             return releasePath;
         }
         else
@@ -92,11 +93,13 @@ public class BuildTools
 
     private static void InitializeReleaseInfo()
     {
+        var releaseInfoPath = Directory.GetParent(Application.dataPath).FullName + "/" + PATH_TO_BUILD_INFO;
+
         // Check if the file exists
-        if (File.Exists(PATH_TO_BUILD_INFO))
+        if (File.Exists(releaseInfoPath))
         {
             // Read the entire file content as a single string
-            string[] lines = File.ReadAllLines(PATH_TO_BUILD_INFO);
+            string[] lines = File.ReadAllLines(releaseInfoPath);
 
             foreach (string line in lines)
             {
@@ -120,7 +123,7 @@ public class BuildTools
         }
         else
         {
-            Debug.LogError("File not found: " + PATH_TO_BUILD_INFO);
+            Debug.LogError("File not found: " + releaseInfoPath);
         }
     }
 
