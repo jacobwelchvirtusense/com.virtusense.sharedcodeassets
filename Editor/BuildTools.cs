@@ -43,7 +43,7 @@ public class BuildTools
 
     public static void BuildForWindows(bool isFromEditor = false)
     {
-        var buildPath = GetBuildPath(isFromEditor);
+        var buildPath = GetBuildPath(false);
 
         List<string> scenes = new List<string>();
         foreach (var scene in EditorBuildSettings.scenes)
@@ -79,6 +79,7 @@ public class BuildTools
 
         if(releaseInfoDictionary.TryGetValue("ReleasePath", out string releasePath))
         {
+            Debug.LogError("This is my build path: " + releasePath);
             return releasePath;
         }
         else
