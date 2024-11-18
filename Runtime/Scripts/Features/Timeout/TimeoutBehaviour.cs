@@ -10,11 +10,11 @@
  *                     for resetting the timeout timer is may also be needed. The ResetTime
  *                     function is public so that it can be called from other scripts for this purpose.
 ****************************************************************************/
+using System;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace SharedPackage.Features.Timeout
 {
@@ -25,7 +25,7 @@ namespace SharedPackage.Features.Timeout
         /// <summary>
         /// The total time before the user is timed out in minutes.
         /// </summary>
-        private const float TIME_BEFORE_TIMEOUT = 10.0f;
+        private float timeBeforeTimeout = 10.0f;
 
         /// <summary>
         /// The total time before the user is timed out in seconds.
@@ -34,7 +34,7 @@ namespace SharedPackage.Features.Timeout
         {
             get
             {
-                return TIME_BEFORE_TIMEOUT * 60.0f;
+                return timeBeforeTimeout * 60.0f;
             }
         }
 
@@ -148,6 +148,34 @@ namespace SharedPackage.Features.Timeout
         private void OnApplicationQuit()
         {
             SetPromptActive(false);
+        }
+
+        /// <summary>
+        /// This will set a new timeout time (currently the user will be timed out after 10 minutes of inactivity).
+        /// </summary>
+        /// <param name="newTimeBeforeTimeout">The new time, don't make this less than 1 minute.</param>
+        public void OverrideTimeBeforeTimeout(float newTimeBeforeTimeout)
+        {
+            timeBeforeTimeout = newTimeBeforeTimeout;
+        }
+
+        /// <summary>
+        /// This will set a new panel to prompt the user when they are about to be timed out. It should have the same structure as the default timeout prompt.
+        /// </summary>
+        /// <param name="newTimeoutPromptMenu">The new object that we want to use as the timeout prompt menu.</param>
+        public void OverrideTimeoutPromptObject(GameObject newTimeoutPromptMenu)
+        {
+            timeoutPrompt = newTimeoutPromptMenu;
+
+            try
+            {
+                var timeBarTextParent = timeoutPrompt.transform.GetChild(0).GetChild(0);
+                promptTimerText = timeBarTextParent.GetChild(1).GetComponent<TextMeshProUGUI>();
+            }
+            catch(Exception e)
+            {
+                Debug.LogError("The new timeout prompt object does not have the correct structure. Please make sure it has the same structure as the default timeout prompt.");
+            }
         }
 
         #region Reset Conditions
