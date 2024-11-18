@@ -139,7 +139,7 @@ namespace SharedPackage.Features.Timeout
         {
             if (UserPressedKey() || UserMovedMouse()) // If other conditions are needed hook them in on a per project basis (unless sharing mode code for that is possible)
             {
-                if (useBuiltInResetConditions)
+                if (useBuiltInResetConditions || !timeoutPrompt.activeSelf) // We usually only use this on mobile devices and mainly wanted to remove functionality while the menu is active
                 ResetTime();
             }
             else
