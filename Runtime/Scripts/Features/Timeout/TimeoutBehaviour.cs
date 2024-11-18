@@ -104,6 +104,11 @@ namespace SharedPackage.Features.Timeout
         /// The text that tells the user how much time is left before the timeout.
         /// </summary>
         private TextMeshProUGUI promptTimerText;
+
+        /// <summary>
+        /// By default we have any key press or mouse movement reset the timer. This can be changed overriding setting this to false.
+        /// </summary>
+        private bool useBuiltInResetConditions = true;
         #endregion
 
         #region Functions
@@ -176,6 +181,15 @@ namespace SharedPackage.Features.Timeout
             {
                 Debug.LogError("The new timeout prompt object does not have the correct structure. Please make sure it has the same structure as the default timeout prompt.");
             }
+        }
+
+        /// <summary>
+        /// By sending false to this we will disable the mouse and any key press from resetting the timer.
+        /// </summary>
+        /// <param name="shouldUseBuildInResetConditions"></param>
+        public void OverrideTimeoutResetFunctionality(bool shouldUseBuildInResetConditions = false)
+        {
+            useBuiltInResetConditions = shouldUseBuildInResetConditions;
         }
 
         #region Reset Conditions
