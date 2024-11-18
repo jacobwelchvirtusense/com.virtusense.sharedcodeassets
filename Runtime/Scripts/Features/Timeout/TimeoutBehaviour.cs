@@ -139,6 +139,7 @@ namespace SharedPackage.Features.Timeout
         {
             if (UserPressedKey() || UserMovedMouse()) // If other conditions are needed hook them in on a per project basis (unless sharing mode code for that is possible)
             {
+                if (useBuiltInResetConditions)
                 ResetTime();
             }
             else
