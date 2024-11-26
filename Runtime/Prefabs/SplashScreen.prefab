@@ -93,12 +93,16 @@ MonoBehaviour:
   splashImage: {fileID: 4734441934614740589}
   spritesToSplash:
   - {fileID: 21300000, guid: e5273de374f1f254d9d0464a2dedefc1, type: 3}
-  - {fileID: 21300000, guid: e57e7b4b52b6a174c8fc7b9da6d20179, type: 3}
+  - {fileID: 21300000, guid: 414e5af0463c0224e93c541b6904c2bf, type: 3}
   totalImageTime: 3
   minImageScale: 0.75
   maxImageScale: 0.85
   fadeInTime: 0.5
   fadeOutTime: 0.5
+  splashScreenDisableDelay: 0.1
+  OnSplashScreenComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4734441934614740563
 GameObject:
   m_ObjectHideFlags: 0
